@@ -15,15 +15,22 @@ function main() {
 	const target = "localhost:50051";
 	// Greeter (service in .proto)
 	const client = new nsProto.Greeter(target, grpc.credentials.createInsecure());
-	console.log(`${new Date().toJSON()} Saying Hello`);
-	client.sayHello({ name: `${new Date().toJSON()} | ELTOROit` }, function (err, response) {
-		console.log(response.message);
-		console.log("Saying Hello Again");
+
+	let messages = [];
+	messages.push({ dttm: new Date().toJSON(), msg: "ELTOROit | Initialized" });
+	messages.push({ dttm: new Date().toJSON(), msg: "> PING" });
+	console.log(`${new Date().toJSON()} | >>> PING | sayHello`);
+	client.sayHello({ jsonMessages: JSON.stringify(messages) }, function (err, response) {
+		console.log(`${new Date().toJSON()} | <<< PONG | sayHello`);
+		messages = JSON.parse(response.jsonMessages);
 		setTimeout(() => {
-			client.sayHelloAgain({ name: `${new Date().toJSON()} | ELTOROit` }, function (err, response) {
-				console.log(response.message);
+			messages.push({ dttm: new Date().toJSON(), msg: "> PING" });
+			console.log(`${new Date().toJSON()} | >>> PING  | sayHelloAgain`);
+			client.sayHelloAgain({ jsonMessages: JSON.stringify(messages) }, function (err, response) {
+				console.log(`${new Date().toJSON()} | <<< PONG | sayHelloAgain`);
+				console.log(JSON.parse(response.jsonMessages));
 			});
-		}, 2e3);
+		}, 5e3);
 	});
 }
 

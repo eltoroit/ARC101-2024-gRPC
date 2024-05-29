@@ -13,22 +13,23 @@ const nsProto = protoDescriptor.helloworld;
 
 // sayHello (rpc function defined in .proto. But implemened here)
 function sayHello(call, callback) {
-	console.log(`Received: ${call.path}: ${JSON.stringify(call.request)}`);
-	// name (variable defined in the message in .proto)
+	let messages = JSON.parse(call.request.jsonMessages);
+	console.log(`${new Date().toJSON()} | >>> PING | ${call.path}`);
 	setTimeout(() => {
-		callback(null, {
-			message: `${new Date().toJSON()} - Hello <${call.request.name}>`,
-		});
-	}, 2e3);
+		console.log(`${new Date().toJSON()} | <<< PONG | ${call.path}`);
+		messages.push({ dttm: new Date().toJSON(), msg: "< PONG" });
+		callback(null, { jsonMessages: JSON.stringify(messages) });
+	}, 5e3);
 }
 
 function sayHelloAgain(call, callback) {
-	console.log(`Recevied: ${call.path}: ${JSON.stringify(call.request)}`);
+	let messages = JSON.parse(call.request.jsonMessages);
+	console.log(`${new Date().toJSON()} | >>> PING | ${call.path}`);
 	setTimeout(() => {
-		callback(null, {
-			message: `${new Date().toJSON()} - Hello again, <${call.request.name}>`,
-		});
-	}, 2e3);
+		console.log(`${new Date().toJSON()} | <<< PONG | ${call.path}`);
+		messages.push({ dttm: new Date().toJSON(), msg: "< PONG" });
+		callback(null, { jsonMessages: JSON.stringify(messages) });
+	}, 5e3);
 }
 
 // Starts an RPC server that receives requests for the Greeter service at the sample server port
@@ -38,6 +39,7 @@ function main() {
 	server.addService(nsProto.Greeter.service, { sayHello, sayHelloAgain });
 	server.bindAsync("0.0.0.0:50051", grpc.ServerCredentials.createInsecure(), () => {
 		// server.start();
+		console.log("Ready...");
 	});
 }
 
