@@ -8,6 +8,7 @@ service Game {
 
 message PingData {
   string data = 1;
+  int32 delay = 2;
 }
 
 message PongData {

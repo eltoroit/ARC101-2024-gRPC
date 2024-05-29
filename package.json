@@ -1,13 +1,14 @@
 {
-	"name": "dynamic_codegen",
+	"name": "gRPC Demos",
 	"version": "1.0.0",
-	"main": "greeter_client.js",
 	"author": "Andres Perez <aperez@salesforce.com> (http://eltoro.it/)",
 	"license": "ISC",
 	"type": "module",
 	"description": "",
 	"scripts": {
-		"client": "node greeter_client.js"
+		"pingPongClient": "node pingPongClient.js",
+		"pingPongServer": "node pingPongServer.js",
+		"salesforceClient": "node salesforceClient.js"
 	},
 	"dependencies": {
 		"@grpc/grpc-js": "^1.10.8",
