@@ -1,6 +1,6 @@
 const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
-const packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/helloworld.proto", {
+const packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/ping-pong.proto", {
 	keepCase: true,
 	longs: String,
 	enums: String,
@@ -8,30 +8,34 @@ const packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/helloworld.prot
 	oneofs: true,
 });
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
-// helloworld (package in .proto)
-const nsProto = protoDescriptor.helloworld;
+const nsProto = protoDescriptor.pingPong;
 
 function main() {
-	const target = "localhost:50051";
-	// Greeter (service in .proto)
-	const client = new nsProto.Greeter(target, grpc.credentials.createInsecure());
-
+	let times = 0;
 	let messages = [];
+	const target = "localhost:50051";
+	const client = new nsProto.Game(target, grpc.credentials.createInsecure());
+
+	const loop = () => {
+		messages.push({ dttm: new Date().toJSON(), msg: "> PING" });
+		console.log(`${new Date().toJSON()} | >>> PING | sayHello`);
+		client.ping({ data: JSON.stringify(messages) }, function (err, response) {
+			console.log(`${new Date().toJSON()} | <<< PONG | sayHello`);
+			messages = JSON.parse(response.data);
+
+			times++;
+			if (times < 5) {
+				setTimeout(() => {
+					loop();
+				}, 1e3);
+			} else {
+				console.log(messages);
+			}
+		});
+	};
+
 	messages.push({ dttm: new Date().toJSON(), msg: "ELTOROit | Initialized" });
-	messages.push({ dttm: new Date().toJSON(), msg: "> PING" });
-	console.log(`${new Date().toJSON()} | >>> PING | sayHello`);
-	client.sayHello({ jsonMessages: JSON.stringify(messages) }, function (err, response) {
-		console.log(`${new Date().toJSON()} | <<< PONG | sayHello`);
-		messages = JSON.parse(response.jsonMessages);
-		setTimeout(() => {
-			messages.push({ dttm: new Date().toJSON(), msg: "> PING" });
-			console.log(`${new Date().toJSON()} | >>> PING  | sayHelloAgain`);
-			client.sayHelloAgain({ jsonMessages: JSON.stringify(messages) }, function (err, response) {
-				console.log(`${new Date().toJSON()} | <<< PONG | sayHelloAgain`);
-				console.log(JSON.parse(response.jsonMessages));
-			});
-		}, 5e3);
-	});
+	loop();
 }
 
 main();

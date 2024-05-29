@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package pingPong;
+
+service Game {
+  rpc ping (PingData) returns (PongData) {}
+}
+
+message PingData {
+  string data = 1;
+}
+
+message PongData {
+  string data = 1;
+}
