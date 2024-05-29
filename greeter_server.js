@@ -1,45 +1,44 @@
 const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader");
-const packageDefinition = protoLoader.loadSync(
-  "@ELTOROIT/protos/helloworld.proto",
-  {
-    keepCase: true,
-    longs: String,
-    enums: String,
-    defaults: true,
-    oneofs: true,
-  }
-);
+const packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/helloworld.proto", {
+	keepCase: true,
+	longs: String,
+	enums: String,
+	defaults: true,
+	oneofs: true,
+});
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 // helloworld (package in .proto)
 const nsProto = protoDescriptor.helloworld;
 
 // sayHello (rpc function defined in .proto. But implemened here)
 function sayHello(call, callback) {
-  // name (variable defined in the message in .proto)
-  callback(null, {
-    message: `${new Date().toJSON()} - Hello <${call.request.name}>`,
-  });
+	console.log(`Received: ${call.path}: ${JSON.stringify(call.request)}`);
+	// name (variable defined in the message in .proto)
+	setTimeout(() => {
+		callback(null, {
+			message: `${new Date().toJSON()} - Hello <${call.request.name}>`,
+		});
+	}, 2e3);
 }
 
 function sayHelloAgain(call, callback) {
-  callback(null, {
-    message: `${new Date().toJSON()} - Hello again, <${call.request.name}>`,
-  });
+	console.log(`Recevied: ${call.path}: ${JSON.stringify(call.request)}`);
+	setTimeout(() => {
+		callback(null, {
+			message: `${new Date().toJSON()} - Hello again, <${call.request.name}>`,
+		});
+	}, 2e3);
 }
 
 // Starts an RPC server that receives requests for the Greeter service at the sample server port
 function main() {
-  const server = new grpc.Server();
-  // Greeter (service in .proto)
-  server.addService(nsProto.Greeter.service, { sayHello, sayHelloAgain });
-  server.bindAsync(
-    "0.0.0.0:50051",
-    grpc.ServerCredentials.createInsecure(),
-    () => {
-      // server.start();
-    }
-  );
+	const server = new grpc.Server();
+	// Greeter (service in .proto)
+	server.addService(nsProto.Greeter.service, { sayHello, sayHelloAgain });
+	server.bindAsync("0.0.0.0:50051", grpc.ServerCredentials.createInsecure(), () => {
+		// server.start();
+	});
 }
 
 main();
