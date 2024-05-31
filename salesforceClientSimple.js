@@ -22,18 +22,12 @@ class Client {
 
 			const metaCallback = (_params, callback) => {
 				debugger;
-				// Authenticate somehow :-)
-				const conMetadata = {
-					accessToken: "00DO2000002c1un!AQEAQCsD1MkBNTcreBRcHun4h2sLR0A067IGJHdwZd8Wwqvh1.R4mKQXuLDke3I6IpVtty7qLs9PmKeRNPiJe.8jp3UQRJ9y",
-					instanceUrl: "https://customization-data-4653-dev-ed.scratch.my.salesforce.com",
-					organizationId: "00DO2000002c1unMAA",
-					username: "test-4ynoc3sdn6er@example.com",
-				};
+				const testPostman = JSON.parse(process.env.TEST_POSTMAN);
 
 				const meta = new grpc.Metadata();
-				meta.add("accesstoken", conMetadata.accessToken);
-				meta.add("instanceurl", conMetadata.instanceUrl);
-				meta.add("tenantid", conMetadata.organizationId);
+				meta.add("accesstoken", testPostman.access_token);
+				meta.add("instanceurl", testPostman.instance_url);
+				meta.add("tenantid", testPostman.access_token.split("!")[0]);
 				callback(null, meta);
 			};
 			const callCreds = grpc.credentials.createFromMetadataGenerator(metaCallback);
@@ -43,32 +37,54 @@ class Client {
 			// const target = "localhost:50051";
 			// const client = new this.nsProto.Game(target, grpc.credentials.createInsecure());
 			const client = new sfdcPackage.PubSub(Configuration.getPubSubEndpoint(), combCreds);
+			const subscription = client.subscribe();
+			// subscription.write({
+			// 	topic_name: "/data/AccountChangeEvent",
+			// 	replay_preset: -1, // Subscription starting point.
+			// 	num_requested: 200, // Number of events a client is ready to accept.
+			// });
+			subscription.write({ topicName: "/data/AccountChangeEvent", numRequested: 100 });
+			subscription.on("data", (data) => {
+				console.log(data);
+				debugger;
+			});
+			subscription.on("end", () => {
+				debugger;
+			});
+			subscription.on("error", (error) => {
+				console.log(error);
+				debugger;
+			});
+			subscription.on("status", (status) => {
+				console.log(status);
+				debugger;
+			});
 
-			client.subscribe(
-				{
-					topic_name: "/data/AccountChangeEvent",
-					replay_preset: -1, // Subscription starting point.
-					num_requested: 200, // Number of events a client is ready to accept.
-				},
-				(err, response) => {
-					debugger;
-					if (err) {
-						console.error(err);
-					}
+			// client.subscribe(
+			// 	{
+			// 		topic_name: "/data/AccountChangeEvent",
+			// 		replay_preset: -1, // Subscription starting point.
+			// 		num_requested: 200, // Number of events a client is ready to accept.
+			// 	},
+			// 	(err, response) => {
+			// 		debugger;
+			// 		if (err) {
+			// 			console.error(err);
+			// 		}
 
-					console.log(response);
-					// debugger;
-					// console.log(
-					// 	`Handling ${event.payload.ChangeEventHeader.entityName} change event ` +
-					// 		`with ID ${event.replayId} ` +
-					// 		`on channel ${eventEmitter.getTopicName()} ` +
-					// 		`(${eventEmitter.getReceivedEventCount()}/${eventEmitter.getRequestedEventCount()} ` +
-					// 		`events received so far)`
-					// );
-					// console.log(event);
-					// console.log(JSON.stringify(event, null, 2));
-				}
-			);
+			// 		console.log(response);
+			// 		// debugger;
+			// 		// console.log(
+			// 		// 	`Handling ${event.payload.ChangeEventHeader.entityName} change event ` +
+			// 		// 		`with ID ${event.replayId} ` +
+			// 		// 		`on channel ${eventEmitter.getTopicName()} ` +
+			// 		// 		`(${eventEmitter.getReceivedEventCount()}/${eventEmitter.getRequestedEventCount()} ` +
+			// 		// 		`events received so far)`
+			// 		// );
+			// 		// console.log(event);
+			// 		// console.log(JSON.stringify(event, null, 2));
+			// 	}
+			// );
 		});
 	}
 }
