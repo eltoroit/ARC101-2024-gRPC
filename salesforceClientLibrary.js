@@ -6,6 +6,7 @@ async function run() {
 		await client.connect();
 
 		// Subscribe to account change events
+		// const eventEmitter = await client.subscribe("/data/ChangeEvents");
 		const eventEmitter = await client.subscribe("/data/AccountChangeEvent");
 
 		// Handle incoming events
@@ -17,8 +18,17 @@ async function run() {
 					`(${eventEmitter.getReceivedEventCount()}/${eventEmitter.getRequestedEventCount()} ` +
 					`events received so far)`
 			);
-			console.log(event);
-			console.log(JSON.stringify(event, null, 2));
+			// console.log(event);
+			// console.log(JSON.stringify(event, null, 2));
+			// console.log(
+			// 	JSON.stringify(
+			// 		event,
+			// 		(key, value) =>
+			// 			/* Convert BigInt values into strings and keep other types unchanged */
+			// 			typeof value === "bigint" ? value.toString() : value,
+			// 		2
+			// 	)
+			// );
 		});
 	} catch (error) {
 		console.error(error);

@@ -7,10 +7,30 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Launch Program",
+			"name": "SF Simple",
 			"skipFiles": ["<node_internals>/**"],
-			// "program": "${workspaceFolder}/salesforceClientLibrary.js"
 			"program": "${workspaceFolder}/salesforceClientSimple.js"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "SF Library",
+			"skipFiles": ["<node_internals>/**"],
+			"program": "${workspaceFolder}/salesforceClientLibrary.js"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "PingPong Server",
+			"skipFiles": ["<node_internals>/**"],
+			"program": "${workspaceFolder}/pingPongServer.js"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "PingPong Client",
+			"skipFiles": ["<node_internals>/**"],
+			"program": "${workspaceFolder}/pingPongClient.js"
 		}
 	]
 }

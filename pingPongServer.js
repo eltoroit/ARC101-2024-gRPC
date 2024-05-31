@@ -14,6 +14,17 @@ class Server {
 		this.nsProto = this.protoDescriptor.pingPong;
 	}
 
+	echo(call, callback) {
+		let request = call.request;
+		let delay = request.delay ? request.delay : 0;
+		console.log("Received", request.data);
+		setTimeout(() => {
+			let data = `Returned: ${request.data}`;
+			console.log(data);
+			callback(null, { data });
+		}, delay * 1e3);
+	}
+
 	ping(call, callback) {
 		let request = call.request;
 		let delay = request.delay ? request.delay : 0;
@@ -28,10 +39,13 @@ class Server {
 
 	startServer() {
 		const server = new grpc.Server();
-		server.addService(this.nsProto.Game.service, { ping: this.ping });
-		server.bindAsync("0.0.0.0:50051", grpc.ServerCredentials.createInsecure(), () => {
+		server.addService(this.nsProto.Game.service, {
+			ping: this.ping,
+			echo: this.echo,
+		});
+		server.bindAsync("0.0.0.0:50051", grpc.ServerCredentials.createInsecure(), (err, port) => {
 			// server.start();
-			console.log("Ready...");
+			console.log("Server is ready...");
 		});
 	}
 }

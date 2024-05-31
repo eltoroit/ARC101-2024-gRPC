@@ -3,6 +3,7 @@ syntax = "proto3";
 package pingPong;
 
 service Game {
+  rpc echo (PingData) returns (PongData) {}
   rpc ping (PingData) returns (PongData) {}
 }
 
