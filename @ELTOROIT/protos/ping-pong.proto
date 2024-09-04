@@ -3,15 +3,26 @@ syntax = "proto3";
 package pingPong;
 
 service Game {
-  rpc echo (PingData) returns (PongData) {}
-  rpc ping (PingData) returns (PongData) {}
+  rpc ping (PingPongData) returns (PingPongData) {}
+  rpc askToPlay (RequestIsPlaying) returns (ResponseIsPlaying) {}
 }
 
-message PingData {
-  string data = 1;
-  int32 delay = 2;
+// Types: https://protobuf.dev/programming-guides/proto3/#scalar
+message RequestIsPlaying {
+  string dttm = 1;
+  string message = 2;
+  int32 delay = 3;
 }
 
-message PongData {
-  string data = 1;
+message ResponseIsPlaying {
+  string dttm = 1;
+  string message = 2;
+  bool isPlaying = 3;
+}
+
+// Numbers are NOT positions, but keys!
+message PingPongData {
+  string dttm = 2;
+  string message = 1;
+  int32 times = 7;
 }

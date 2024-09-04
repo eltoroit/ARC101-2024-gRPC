@@ -14,26 +14,35 @@ class Server {
 		this.nsProto = this.protoDescriptor.pingPong;
 	}
 
-	echo(call, callback) {
+	askToPlay(call, callback) {
 		let request = call.request;
 		let delay = request.delay ? request.delay : 0;
-		console.log("Received", request.data);
+		console.log("Player wants to play... ", request);
 		setTimeout(() => {
-			let data = `Returned: ${request.data}`;
-			console.log(data);
-			callback(null, { data });
+			const msg = {
+				dttm: new Date().toJSON(),
+				message: "Yes, let's play!",
+				isPlaying: Math.random() > 0.5,
+			};
+			console.log(msg);
+			callback(null, msg);
 		}, delay * 1e3);
 	}
 
 	ping(call, callback) {
+		let delay = 2;
 		let request = call.request;
-		let delay = request.delay ? request.delay : 0;
-		let messages = JSON.parse(request.data);
-		console.log(`${new Date().toJSON()} | >>> PING (${delay} sec)`);
+		let times = request.times ? request.times : "?";
+		let message = request.message ? request.message : "ERROR NO MESAAGE RECEIVED";
+		console.log(new Date().toJSON(), request);
 		setTimeout(() => {
-			console.log(`${new Date().toJSON()} | <<< PONG (${delay} sec)`);
-			messages.push({ dttm: new Date().toJSON(), msg: `< PONG (${delay} sec)` });
-			callback(null, { data: JSON.stringify(messages) });
+			const msg = {
+				times,
+				dttm: new Date().toJSON(),
+				message: `${new Date().toJSON()} | <<< PONG #${times}`,
+			};
+			console.log(msg);
+			callback(null, msg);
 		}, delay * 1e3);
 	}
 
@@ -41,7 +50,7 @@ class Server {
 		const server = new grpc.Server();
 		server.addService(this.nsProto.Game.service, {
 			ping: this.ping,
-			echo: this.echo,
+			askToPlay: this.askToPlay,
 		});
 		server.bindAsync("0.0.0.0:50051", grpc.ServerCredentials.createInsecure(), (err, port) => {
 			// server.start();
