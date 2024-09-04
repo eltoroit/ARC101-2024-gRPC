@@ -32,7 +32,7 @@ class Client {
 			});
 			subscription.on("data", (data) => {
 				debugger;
-				console.log(data);
+				console.log(JSON.stringify(data));
 			});
 			subscription.on("end", () => {
 				debugger;
