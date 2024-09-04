@@ -32,7 +32,10 @@ class Client {
 			});
 			subscription.on("data", (data) => {
 				debugger;
+				console.log("=== === ===\nPayload is binary\n=== === ===");
 				console.log(JSON.stringify(data));
+				console.log("=== === ===\nTrying to make a bit of sense...\n=== === ===");
+				console.log(data.events[0].event.payload.toString());
 			});
 			subscription.on("end", () => {
 				debugger;

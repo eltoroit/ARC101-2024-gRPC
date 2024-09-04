@@ -6,15 +6,15 @@
 	"type": "module",
 	"description": "",
 	"scripts": {
-		"pingPongClient": "node pingPongClient.js",
-		"pingPongServer": "node pingPongServer.js",
-		"salesforceClientSimple": "node salesforceClientSimple.js",
-		"salesforceClientLibrary": "node salesforceClientLibrary.js",
-		"serverREST": "node demoRPC/servers/serverREST.js",
-		"serverGRPC": "node demoRPC/servers/serverGRPC.js",
-		"clientGRPC": "node demoRPC/demoRPC_05.js",
-		"clientStream": "node demoStream/clientStream.js",
-		"serverStream": "node demoStream/serverStream.js"
+		"demo01_serverGRPC": "node demo01_RPC/servers/serverGRPC.js",
+		"demo01_serverREST": "node demo01_RPC/servers/serverREST.js",
+		"demo01_clientGRPC": "node demo01_RPC/demoRPC_05.js",
+		"demo02_serverPingPong": "node demo02_PingPong/pingPongServer.js",
+		"demo02_clientPingPong": "node demo02_PingPong/pingPongClient.js",
+		"demo03_serverStream": "node demo03_Stream/serverStream.js",
+		"demo03_clientStream": "node demo03_Stream/clientStream.js",
+		"demo04_clientSalesforceSimple": "node demo04_Salesforce/salesforceClientSimple.js",
+		"demo04_clientSalesforceLibrary": "node demo04_Salesforce/salesforceClientLibrary.js"
 	},
 	"dependencies": {
 		"@grpc/grpc-js": "^1.10.8",
