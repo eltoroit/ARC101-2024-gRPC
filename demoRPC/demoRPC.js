@@ -3,12 +3,15 @@ class DemoRPC {
 		let i = 2;
 		let j = 3;
 		let k = await this.add(i, j);
-		console.log(`System procedure called: ${k}`);
+		console.log(`Remote procedure called: ${k}`);
 		return k;
 	}
 
 	async add(i, j) {
-		return i + j;
+		const response = await fetch(`http://localhost:3000/add?i=${i}&j=${j}`);
+		const data = await response.json();
+
+		return data.sum;
 	}
 }
 
