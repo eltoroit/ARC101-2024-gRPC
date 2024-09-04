@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package demoRPC;
+
+service Math {
+  rpc add (InputData) returns (OutputData) {}
+}
+
+message InputData {
+  int32 i = 1;
+  int32 j = 2;
+}
+
+message OutputData {
+  string k = 1;
+}

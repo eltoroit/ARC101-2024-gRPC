@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package demoStream;
+
+service Clock {
+  rpc getTime (ClockData) returns ( ClockData) {}
+  rpc stream (ClockData) returns (stream ClockData) {}
+}
+
+message ClockData {
+  string dttm = 1;
+  int32 max = 2;
+  int32 counter = 3;
+}
