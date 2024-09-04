@@ -3,6 +3,7 @@ class DemoRPC {
 		let i = 2;
 		let j = 3;
 		let k = await this.add(i, j);
+		console.log(`System procedure called: ${k}`);
 		return k;
 	}
 
@@ -13,5 +14,5 @@ class DemoRPC {
 
 let demo = new DemoRPC();
 demo.simpleCode().then((k) => {
-	console.log(`Local procedure called: ${k}`);
+	console.log(`END: ${k}`);
 });
