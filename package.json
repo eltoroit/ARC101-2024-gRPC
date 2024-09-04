@@ -12,7 +12,9 @@
 		"salesforceClientLibrary": "node salesforceClientLibrary.js",
 		"serverREST": "node demoRPC/servers/serverREST.js",
 		"serverGRPC": "node demoRPC/servers/serverGRPC.js",
-		"clientGRPC": "node demoRPC/demoRPC_05.js"
+		"clientGRPC": "node demoRPC/demoRPC_05.js",
+		"clientStream": "node demoStream/clientStream.js",
+		"serverStream": "node demoStream/serverStream.js"
 	},
 	"dependencies": {
 		"@grpc/grpc-js": "^1.10.8",
