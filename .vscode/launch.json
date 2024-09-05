@@ -4,33 +4,33 @@
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
+		// {
+		// 	"type": "node",
+		// 	"request": "launch",
+		// 	"name": "SF Simple",
+		// 	"skipFiles": ["<node_internals>/**"],
+		// 	"program": "${workspaceFolder}/salesforceClientSimple.js"
+		// },
+		// {
+		// 	"type": "node",
+		// 	"request": "launch",
+		// 	"name": "SF Library",
+		// 	"skipFiles": ["<node_internals>/**"],
+		// 	"program": "${workspaceFolder}/salesforceClientLibrary.js"
+		// },
+		// {
+		// 	"type": "node",
+		// 	"request": "launch",
+		// 	"name": "PingPong Server",
+		// 	"skipFiles": ["<node_internals>/**"],
+		// 	"program": "${workspaceFolder}/pingPongServer.js"
+		// },
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "SF Simple",
+			"name": "Client",
 			"skipFiles": ["<node_internals>/**"],
-			"program": "${workspaceFolder}/salesforceClientSimple.js"
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "SF Library",
-			"skipFiles": ["<node_internals>/**"],
-			"program": "${workspaceFolder}/salesforceClientLibrary.js"
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "PingPong Server",
-			"skipFiles": ["<node_internals>/**"],
-			"program": "${workspaceFolder}/pingPongServer.js"
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "PingPong Client",
-			"skipFiles": ["<node_internals>/**"],
-			"program": "${workspaceFolder}/pingPongClient.js"
+			"program": "${workspaceFolder}/demo05_SalesforceCDC/salesforceClientLibraryCDC.js"
 		}
 	]
 }

@@ -2,18 +2,6 @@ import grpc from "@grpc/grpc-js";
 import protoLoader from "@grpc/proto-loader";
 
 class ServerStream {
-	constructor() {
-		this.packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/demoStream.proto", {
-			keepCase: true,
-			longs: String,
-			enums: String,
-			defaults: true,
-			oneofs: true,
-		});
-		this.protoDescriptor = grpc.loadPackageDefinition(this.packageDefinition);
-		this.nsProto = this.protoDescriptor.demoStream;
-	}
-
 	getTime(call, callback) {
 		callback(null, { dttm: new Date().toJSON() });
 	}
@@ -32,7 +20,8 @@ class ServerStream {
 
 	startServer() {
 		const server = new grpc.Server();
-		server.addService(this.nsProto.Clock.service, {
+		const protoDescriptor = grpc.loadPackageDefinition(protoLoader.loadSync("@ELTOROIT/protos/demoStream.proto", {}));
+		server.addService(protoDescriptor.demoStream.Clock.service, {
 			stream: this.stream,
 			getTime: this.getTime,
 		});
@@ -43,5 +32,4 @@ class ServerStream {
 	}
 }
 
-const serverStream = new ServerStream();
-serverStream.startServer();
+new ServerStream().startServer();

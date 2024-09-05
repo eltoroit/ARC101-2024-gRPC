@@ -3,16 +3,8 @@ import protoLoader from "@grpc/proto-loader";
 
 class DemoRPC {
 	constructor() {
-		this.packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/demoRPC.proto", {
-			keepCase: true,
-			longs: String,
-			enums: String,
-			defaults: true,
-			oneofs: true,
-		});
-		this.protoDescriptor = grpc.loadPackageDefinition(this.packageDefinition);
-		this.nsProto = this.protoDescriptor.demoRPC;
-		this.client = new this.nsProto.Math("localhost:50051", grpc.credentials.createInsecure());
+		const protoDescriptor = grpc.loadPackageDefinition(protoLoader.loadSync("@ELTOROIT/protos/demoRPC.proto", {}));
+		this.client = new protoDescriptor.demoRPC.Math("localhost:50051", grpc.credentials.createInsecure());
 	}
 
 	async simpleCode() {
@@ -32,7 +24,6 @@ class DemoRPC {
 	}
 }
 
-let demo = new DemoRPC();
-demo.simpleCode().then((k) => {
+new DemoRPC().simpleCode().then((k) => {
 	console.log(`END: ${k}`);
 });

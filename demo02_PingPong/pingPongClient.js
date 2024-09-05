@@ -3,22 +3,12 @@ import protoLoader from "@grpc/proto-loader";
 
 class Client {
 	constructor() {
-		this.packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/ping-pong.proto", {
-			keepCase: true,
-			longs: String,
-			enums: String,
-			defaults: true,
-			oneofs: true,
-		});
-		this.protoDescriptor = grpc.loadPackageDefinition(this.packageDefinition);
-		this.nsProto = this.protoDescriptor.pingPong;
+		const protoDescriptor = grpc.loadPackageDefinition(protoLoader.loadSync("@ELTOROIT/protos/ping-pong.proto", {}));
+		this.client = new protoDescriptor.pingPong.Game("localhost:50051", grpc.credentials.createInsecure());
 	}
 
 	mainLoop() {
 		let times = 0;
-		const target = "localhost:50051";
-		const client = new this.nsProto.Game(target, grpc.credentials.createInsecure());
-
 		const loop = () => {
 			const msg = {
 				times,
@@ -26,7 +16,7 @@ class Client {
 				message: `> PING #${times}`,
 			};
 			console.log(new Date().toJSON(), msg);
-			client.ping(msg, (err, response) => {
+			this.client.ping(msg, (err, response) => {
 				if (err) {
 					console.log(err);
 					return;
@@ -45,16 +35,13 @@ class Client {
 
 	askToPlay() {
 		return new Promise((resolve, reject) => {
-			const target = "localhost:50051";
-			const client = new this.nsProto.Game(target, grpc.credentials.createInsecure());
-			// const client = new this.nsProto.Game(target, grpc.credentials.createInsecure(), { interceptors: [this.#interceptor] });
 			const msg = {
 				dttm: new Date().toJSON(),
 				message: "Do you want to play ping-pong?",
 				delay: 2,
 			};
 			console.log(msg);
-			client.askToPlay(msg, (err, response) => {
+			this.client.askToPlay(msg, (err, response) => {
 				if (err) {
 					reject(err);
 					return;
@@ -69,25 +56,26 @@ class Client {
 		});
 	}
 
-	#interceptor(options, nextCall) {
-		// Create a new InterceptingCall instance
-		return new grpc.InterceptingCall(nextCall(options), {
-			// Intercept the sendMessage operation
-			sendMessage: (requestMessage, next) => {
-				// debugger;
-				console.log("Intercepted request:", requestMessage);
-				// Call the next interceptor or the original method
-				next(requestMessage);
-			},
-			// Intercept the receiveMessage operation
-			receiveMessage: (responseMessage, next) => {
-				// debugger;
-				console.log("Intercepted response:", responseMessage);
-				// Call the next interceptor or the original method
-				next(responseMessage);
-			},
-		});
-	}
+	// // this.client = new protoDescriptor.pingPong.Game("localhost:50051", grpc.credentials.createInsecure(), { interceptors: [this.#interceptor] });
+	// #interceptor(options, nextCall) {
+	// 	// Create a new InterceptingCall instance
+	// 	return new grpc.InterceptingCall(nextCall(options), {
+	// 		// Intercept the sendMessage operation
+	// 		sendMessage: (requestMessage, next) => {
+	// 			// debugger;
+	// 			console.log("Intercepted request:", requestMessage);
+	// 			// Call the next interceptor or the original method
+	// 			next(requestMessage);
+	// 		},
+	// 		// Intercept the receiveMessage operation
+	// 		receiveMessage: (responseMessage, next) => {
+	// 			// debugger;
+	// 			console.log("Intercepted response:", responseMessage);
+	// 			// Call the next interceptor or the original method
+	// 			next(responseMessage);
+	// 		},
+	// 	});
+	// }
 }
 
 let client = new Client();

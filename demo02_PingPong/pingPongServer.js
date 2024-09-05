@@ -2,18 +2,6 @@ import grpc from "@grpc/grpc-js";
 import protoLoader from "@grpc/proto-loader";
 
 class Server {
-	constructor() {
-		this.packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/ping-pong.proto", {
-			keepCase: true,
-			longs: String,
-			enums: String,
-			defaults: true,
-			oneofs: true,
-		});
-		this.protoDescriptor = grpc.loadPackageDefinition(this.packageDefinition);
-		this.nsProto = this.protoDescriptor.pingPong;
-	}
-
 	askToPlay(call, callback) {
 		let request = call.request;
 		let delay = request.delay ? request.delay : 0;
@@ -33,7 +21,7 @@ class Server {
 		let delay = 2;
 		let request = call.request;
 		let times = request.times ? request.times : "?";
-		let message = request.message ? request.message : "ERROR NO MESAAGE RECEIVED";
+		let message = request.message ? request.message : "ERROR NO MESSAGE RECEIVED";
 		console.log(new Date().toJSON(), request);
 		setTimeout(() => {
 			const msg = {
@@ -48,16 +36,27 @@ class Server {
 
 	startServer() {
 		const server = new grpc.Server();
-		server.addService(this.nsProto.Game.service, {
+		const protoDescriptor = grpc.loadPackageDefinition(protoLoader.loadSync("@ELTOROIT/protos/ping-pong.proto", {}));
+		server.addService(protoDescriptor.pingPong.Game.service, {
 			ping: this.ping,
 			askToPlay: this.askToPlay,
 		});
 		server.bindAsync("0.0.0.0:50051", grpc.ServerCredentials.createInsecure(), (err, port) => {
-			// server.start();
 			console.log("Server is ready...");
 		});
 	}
 }
 
-const server = new Server();
-server.startServer();
+new Server().startServer();
+
+/*
+this.packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/ping-pong.proto", {
+	keepCase: true,
+	longs: String,
+	enums: String,
+	defaults: true,
+	oneofs: true,
+});
+this.protoDescriptor = grpc.loadPackageDefinition(this.packageDefinition);
+this.nsProto = this.protoDescriptor.pingPong;
+*/

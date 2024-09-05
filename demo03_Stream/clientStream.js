@@ -3,16 +3,8 @@ import protoLoader from "@grpc/proto-loader";
 
 class DemoStream {
 	constructor() {
-		this.packageDefinition = protoLoader.loadSync("@ELTOROIT/protos/demoStream.proto", {
-			keepCase: true,
-			longs: String,
-			enums: String,
-			defaults: true,
-			oneofs: true,
-		});
-		this.protoDescriptor = grpc.loadPackageDefinition(this.packageDefinition);
-		this.nsProto = this.protoDescriptor.demoStream;
-		this.client = new this.nsProto.Clock("localhost:50051", grpc.credentials.createInsecure());
+		const protoDescriptor = grpc.loadPackageDefinition(protoLoader.loadSync("@ELTOROIT/protos/demoStream.proto", {}));
+		this.client = new protoDescriptor.demoStream.Clock("localhost:50051", grpc.credentials.createInsecure());
 	}
 
 	async getTime() {
