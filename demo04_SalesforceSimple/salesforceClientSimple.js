@@ -16,10 +16,12 @@ class SalesforceClientSimple {
 	forEver() {
 		// Infinite loop, promise never resolves!
 		// Using event loop to get a new thread and clean memory.
-		return new Promise((resolve, reject) => {
+		return new Promise(async (resolve, reject) => {
+			// Infinite loop, promise never resolves!
 			const loop = async () => {
 				try {
 					await this.subscribe();
+					this.#showPerfomance();
 				} catch (ex) {
 					console.log(`${new Date().toJSON()} >> Error handled`);
 				}
@@ -30,7 +32,13 @@ class SalesforceClientSimple {
 	}
 
 	subscribe() {
-		const setReplayId = (msg) => {
+		const eventsCounter = { requested: 5, received: 0 };
+
+		const makePayload = () => {
+			let msg = {
+				numRequested: eventsCounter.requested,
+				topicName: "/data/AccountChangeEvent",
+			};
 			if (this.objLastReplayId.valueBuffer) {
 				// From known replay Id
 				msg.replayPreset = 2;
@@ -39,6 +47,7 @@ class SalesforceClientSimple {
 				// -2: From the beginning
 				msg.replayPreset = 1;
 			}
+			return msg;
 		};
 
 		const receivedData = (data) => {
@@ -47,24 +56,25 @@ class SalesforceClientSimple {
 				// Only show this for the first time.
 				console.log(`=== === ===\n${new Date().toJSON()} >> Payload is binary\n=== === ===`);
 				console.log(JSON.stringify(data));
+				console.log(`=== === ===`);
 				// console.log("Client:\n", this.client);
 				// console.log("subscription:\n", subscription);
 			}
 			try {
 				let found = false;
-				let strPayload = "";
 				data.events.forEach((item) => {
 					found = true;
 					this.objLastReplayId = {
 						valueBuffer: item.replayId,
 						valueNumber: this.#buffertoNumber(item.replayId),
 					};
-					strPayload += `\n${new Date().toJSON()} >> #${++this.totalEvents} - ReplayId ${this.objLastReplayId.valueNumber}\n`;
-					strPayload += item.event.payload.toString().substr(0, 150) + "\n";
+					eventsCounter.received++;
+					console.log(
+						`${new Date().toJSON()} >>> (${eventsCounter.received} of ${eventsCounter.requested})  ReplayId ${this.objLastReplayId.valueNumber}. Total received: ${++this
+							.totalEvents} | ${item.event.payload.toString().substr(0, 50)}`
+					);
 				});
-				if (found) {
-					console.log(strPayload);
-				} else {
+				if (!found) {
 					throw "NO events found";
 				}
 			} catch (ex) {
@@ -77,16 +87,14 @@ class SalesforceClientSimple {
 		};
 
 		return new Promise((resolve, reject) => {
-			let msg = {
-				numRequested: 5,
-				topicName: "/data/AccountChangeEvent",
-			};
-			setReplayId(msg);
-
 			const subscription = this.client.subscribe({});
-			subscription.write(msg);
+			subscription.write(makePayload());
 			subscription.on("data", (data) => {
 				receivedData(data);
+				if (eventsCounter.received >= eventsCounter.requested) {
+					console.log(`${new Date().toJSON()} >> All requested events were received`);
+					resolve();
+				}
 			});
 			subscription.on("end", () => {
 				console.log(`${new Date().toJSON()} >> Stream ended`);
@@ -133,6 +141,13 @@ class SalesforceClientSimple {
 				callback(null, meta);
 			})
 		);
+	}
+
+	performance = [];
+	#showPerfomance() {
+		let perf = process.memoryUsage();
+		this.performance.push(perf);
+		console.warn(`${new Date().toJSON()} >>> Performance ${JSON.stringify(perf)}`);
 	}
 }
 

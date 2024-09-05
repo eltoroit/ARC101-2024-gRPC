@@ -9,35 +9,31 @@ class SalesforceClientLibraryCDC {
 	async forEver() {
 		const credentials = this.#getCredentialsViaPostman();
 
-		// Infinite loop, promise never resolves!
-		// Using event loop to get a new thread and clean memory.
 		return new Promise(async (resolve, reject) => {
+			// Infinite loop, promise never resolves!
 			const loop = async () => {
 				try {
 					await this.subscribe(credentials);
+					this.#showPerfomance();
 				} catch (ex) {
 					console.log(`${new Date().toJSON()} >> Error handled`);
 				}
-				setTimeout(() => {
-					loop();
-				}, 1e3);
+				loop();
 			};
-
-			await loop();
+			loop();
 		});
 	}
 
 	subscribe(credentials) {
-		let eventEmitter;
 		let channel = "/data/AccountChangeEvent"; // /data/ChangeEvents
 
 		return new Promise(async (resolve, reject) => {
 			try {
 				const client = new PubSubApiClient(this.#logger);
-				await client.connectWithAuth(credentials.accesstoken, credentials.instanceurl, credentials.tenantid);
+				await client.connectWithAuth(credentials.accessToken, credentials.instanceUrl, credentials.tenantId);
 
+				let eventEmitter;
 				if (this.lastReplayId > 0) {
-					// console.log(`Subscribing with ReplayId: ${this.lastReplayId}`);
 					eventEmitter = await client.subscribeFromReplayId(channel, 5, this.lastReplayId);
 				} else {
 					eventEmitter = await client.subscribeFromEarliestEvent(channel, 5);
@@ -46,6 +42,10 @@ class SalesforceClientLibraryCDC {
 				// Handle incoming events
 				eventEmitter.on("data", (event) => {
 					// https://github.com/pozil/pub-sub-api-node-client DOES NOT RETURN THE ReplayIds IN ORDER!!!
+					// Until fixed, make sure the package is
+					// "salesforce-pubsub-api-client": "https://github.com/eltoroit/pub-sub-api-node-client.git"
+					// Instead of
+					// "salesforce-pubsub-api-client": "^4.1.1"
 					if (event.replayId > this.lastReplayId) {
 						this.totalEvents++;
 						this.lastReplayId = Math.max(this.lastReplayId, event.replayId);
@@ -87,38 +87,16 @@ class SalesforceClientLibraryCDC {
 	}
 
 	#getCredentialsViaPostman() {
-		// This is useful if you want to login yourself
-		// await client.connectWithAuth(credentials.accesstoken, credentials.instanceurl, credentials.tenantid);
 		const testPostman = JSON.parse(process.env.TEST_POSTMAN);
+		const userUrl = testPostman.id;
 		const credentials = {
-			accesstoken: testPostman.access_token,
-			instanceurl: testPostman.instance_url,
-			tenantid: testPostman.access_token.split("!")[0],
+			accessToken: testPostman.access_token,
+			instanceUrl: testPostman.instance_url,
+			tenantId: testPostman.access_token.split("!")[0],
+			userId: userUrl.substring(userUrl.lastIndexOf("/") + 1),
 		};
-		process.env.SALESFORCE_LOGIN_URL = testPostman.instance_url;
+		process.env.SALESFORCE_LOGIN_URL = credentials.instanceUrl;
 		return credentials;
-	}
-
-	async #prepareLogin() {
-		// This is useful if you want to let the library login
-		// await client.connect();
-		try {
-			if (process.env.USER_JSON) {
-				let txtData = await fs.promises.readFile(process.env.USER_JSON, "utf8");
-				let jsontData = JSON.parse(txtData);
-				let userData = jsontData.user;
-				process.env.SALESFORCE_USERNAME = userData.username;
-				process.env.SALESFORCE_PASSWORD = userData.password;
-				process.env.SALESFORCE_LOGIN_URL = userData.instanceUrl;
-				// process.env.OAUTH_CONSUMER_KEY = userData.consumerKey;
-				// process.env.OAUTH_CONSUMER_SECRET = userData.consumerSecret;
-				console.log(`Settings read from ${process.env.USER_JSON}`);
-			} else {
-				throw "Missing process.env.USER_JSON";
-			}
-		} catch (err) {
-			console.error(`Error: ${err.message}`);
-		}
 	}
 
 	#logger = {
@@ -139,6 +117,13 @@ class SalesforceClientLibraryCDC {
 			console.warn(`${new Date().toJSON()} >>> WARN >>>`, ...params);
 		},
 	};
+
+	performance = [];
+	#showPerfomance() {
+		let perf = process.memoryUsage();
+		this.performance.push(perf);
+		console.warn(`${new Date().toJSON()} >>> Performance ${JSON.stringify(perf)}`);
+	}
 }
 
 dotenv.config();

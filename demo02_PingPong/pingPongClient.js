@@ -85,5 +85,5 @@ client
 		client.mainLoop();
 	})
 	.catch(() => {
-		console.log("Server does not want to play! Try again...");
+		console.error("Server does not want to play! Try again...");
 	});

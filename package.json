@@ -15,21 +15,21 @@
 		"demo03_clientStream": "node demo03_Stream/clientStream.js",
 		"demo04_clientSFSimple": "node demo04_SalesforceSimple/salesforceClientSimple.js",
 		"demo05_clientSFLibraryCDC": "node demo05_SalesforceCDC/salesforceClientLibraryCDC.js",
-		"demo04_clientSFLibraryPE_Sub": "node demo04_Salesforce/salesforceClientLibraryPE_Sub.js",
-		"demo04_clientSFLibraryPE_Pub": "node demo04_Salesforce/salesforceClientLibraryPE_Pub.js"
+		"demo04_clientSFLibraryPE_Sub": "node demo06_SalesforcePE/salesforceClientLibraryPE_Sub.js",
+		"demo04_clientSFLibraryPE_Pub": "node demo06_SalesforcePE/salesforceClientLibraryPE_Pub.js"
 	},
 	"dependencies": {
-		"@grpc/grpc-js": "^1.10.8",
-		"@grpc/grpc-js-xds": "^1.10.1",
+		"@grpc/grpc-js": "^1.11.1",
+		"@grpc/grpc-js-xds": "^1.11.0",
 		"@grpc/proto-loader": "^0.7.13",
 		"@grpc/reflection": "^1.0.4",
-		"async": "^3.2.5",
+		"async": "^3.2.6",
 		"certifi": "^14.5.15",
 		"dotenv": "^16.4.5",
 		"express": "^4.19.2",
-		"google-protobuf": "^3.21.2",
+		"google-protobuf": "^3.21.4",
 		"lodash": "^4.17.21",
 		"minimist": "^1.2.8",
-		"salesforce-pubsub-api-client": "^3.4.1"
+		"salesforce-pubsub-api-client": "https://github.com/eltoroit/pub-sub-api-node-client.git"
 	}
 }
