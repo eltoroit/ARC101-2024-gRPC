@@ -9,7 +9,7 @@ class DemoRPC {
 	}
 
 	async add(i, j) {
-		const response = await fetch(`http://localhost:3000/add?i=${i}&j=${j}`);
+		const response = await fetch(`http://calculator.eltoro.it/add?i=${i}&j=${j}`);
 		const data = await response.json();
 
 		return data.sum;
