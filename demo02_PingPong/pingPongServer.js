@@ -42,7 +42,11 @@ class Server {
 			askToPlay: this.askToPlay,
 		});
 		server.bindAsync("0.0.0.0:50051", grpc.ServerCredentials.createInsecure(), (err, port) => {
-			console.log("Server is ready...");
+			if (err) {
+				console.log(err);
+			} else {
+				console.log("Server is ready...");
+			}
 		});
 	}
 }

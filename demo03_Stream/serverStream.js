@@ -26,8 +26,11 @@ class ServerStream {
 			getTime: this.getTime,
 		});
 		server.bindAsync("0.0.0.0:50051", grpc.ServerCredentials.createInsecure(), (err, port) => {
-			// server.start();
-			console.log("Server is ready...");
+			if (err) {
+				console.log(err);
+			} else {
+				console.log("Server is ready...");
+			}
 		});
 	}
 }
