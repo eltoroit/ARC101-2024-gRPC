@@ -15,8 +15,8 @@
 		"demo03_clientStream": "node demo03_Stream/clientStream.js",
 		"demo04_clientSFSimple": "node demo04_SalesforceSimple/salesforceClientSimple.js",
 		"demo05_clientSFLibraryCDC": "node demo05_SalesforceCDC/salesforceClientLibraryCDC.js",
-		"demo04_clientSFLibraryPE_Sub": "node demo06_SalesforcePE/salesforceClientLibraryPE_Sub.js",
-		"demo04_clientSFLibraryPE_Pub": "node demo06_SalesforcePE/salesforceClientLibraryPE_Pub.js"
+		"demo06_clientSFLibraryPE_Sub": "node demo06_SalesforcePE/salesforceClientLibraryPE_Sub.js",
+		"demo06_clientSFLibraryPE_Pub": "node demo06_SalesforcePE/salesforceClientLibraryPE_Pub.js"
 	},
 	"dependencies": {
 		"@grpc/grpc-js": "^1.11.1",
