@@ -7,9 +7,9 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "demo04_clientSFSimple",
-			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**", "*VM*"],
-			"program": "${workspaceFolder}/demo04_SalesforceSimple/salesforceClientSimple.js"
+			"name": "demo05_clientSFLibraryCDC",
+			// "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**", "*VM*"],
+			"program": "${workspaceFolder}/demo05_SalesforceLibraryCDC/salesforceClientLibraryCDC.js"
 		}
 	]
 }

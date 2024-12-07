@@ -41,6 +41,7 @@ class SalesforceClientLibraryCDC {
 
 				// Handle incoming events
 				eventEmitter.on("data", (event) => {
+					// https://github.com/pozil/pub-sub-api-node-client/issues/38
 					// https://github.com/pozil/pub-sub-api-node-client DOES NOT RETURN THE ReplayIds IN ORDER!!!
 					// Until fixed, make sure the package is
 					// "salesforce-pubsub-api-client": "https://github.com/eltoroit/pub-sub-api-node-client.git"
@@ -54,6 +55,7 @@ class SalesforceClientLibraryCDC {
 								`(${eventEmitter.getReceivedEventCount()} of ${eventEmitter.getRequestedEventCount()}) ` +
 								`ReplayId: ${event.replayId}. Total received: ${this.totalEvents}`
 						);
+						this.showData(event.payload);
 					} else {
 						console.log(`${event.replayId} event out of order`);
 						debugger;
@@ -123,6 +125,33 @@ class SalesforceClientLibraryCDC {
 		let perf = process.memoryUsage();
 		this.performance.push(perf);
 		console.warn(`${new Date().toJSON()} >>> Performance ${JSON.stringify(perf)}`);
+	}
+
+	showData(obj) {
+		const cleanObject = (o) => {
+			// If not an object, return the value as-is
+			if (typeof o !== "object" || o === null) return o;
+
+			// If it's an array, map and clean each element
+			if (Array.isArray(o)) {
+				return o.map(cleanObject).filter((item) => item !== undefined);
+			}
+
+			// For objects, create a new object removing null/empty values
+			const cleaned = {};
+			for (const [key, value] of Object.entries(o)) {
+				const cleanedValue = cleanObject(value);
+
+				// Only add non-null, non-undefined values
+				if (cleanedValue !== undefined && cleanedValue !== null && (typeof cleanedValue !== "object" || Object.keys(cleanedValue).length > 0)) {
+					cleaned[key] = cleanedValue;
+				}
+			}
+
+			return Object.keys(cleaned).length > 0 ? cleaned : undefined;
+		};
+
+		console.log(JSON.stringify(cleanObject(obj), null, 2));
 	}
 }
 

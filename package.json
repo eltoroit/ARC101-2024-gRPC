@@ -13,8 +13,8 @@
 		"demo02_clientPingPong": "node demo02_PingPong/pingPongClient.js",
 		"demo03_serverStream": "node demo03_Stream/serverStream.js",
 		"demo03_clientStream": "node demo03_Stream/clientStream.js",
-		"demo04_clientSFRaw": "node demo04_SalesforceRawCDC/salesforceClientSimple.js",
-		"demo05_clientSFLibraryCDC": "node demo05_SalesforceCDC/salesforceClientLibraryCDC.js",
+		"demo04_clientSFRawCDC": "node demo04_SalesforceRawCDC/salesforceClientSimple.js",
+		"demo05_clientSFLibraryCDC": "node demo05_SalesforceLibraryCDC/salesforceClientLibraryCDC.js",
 		"demo06_clientSFLibraryPE_Sub": "node demo06_SalesforcePE/salesforceClientLibraryPE_Sub.js",
 		"demo06_clientSFLibraryPE_Pub": "node demo06_SalesforcePE/salesforceClientLibraryPE_Pub.js"
 	},
@@ -30,6 +30,6 @@
 		"google-protobuf": "^3.21.4",
 		"lodash": "^4.17.21",
 		"minimist": "^1.2.8",
-		"salesforce-pubsub-api-client": "https://github.com/eltoroit/pub-sub-api-node-client.git"
+		"salesforce-pubsub-api-client": "^5.2.0"
 	}
 }

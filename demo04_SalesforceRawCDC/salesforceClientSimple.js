@@ -54,11 +54,11 @@ class SalesforceClientSimple {
 		};
 
 		const displayRawData = (data) => {
-			console.log(`\x1B[2m`); // Dim output
+			process.stdout.write(`\x1B[2m`); // Dim output
 			console.log(`=== === ===\n${new Date().toJSON()} >> Payload:`);
 			console.log(`${JSON.stringify(data)}`);
 			console.log(`=== === ===`);
-			console.log(`\x1b[0m`); // Reset colors
+			process.stdout.write(`\x1b[0m`); // Reset colors
 		};
 
 		const processReceivedData = (data) => {
@@ -69,6 +69,7 @@ class SalesforceClientSimple {
 				try {
 					data.events.forEach((item) => {
 						found = true;
+						const charCount = 150;
 						this.objLastReplayId = {
 							valueBuffer: item.replayId,
 							valueNumber: this.#buffertoNumber(item.replayId),
@@ -76,7 +77,7 @@ class SalesforceClientSimple {
 						eventsCounter.received++;
 						console.log(
 							`${new Date().toJSON()} >>> (${eventsCounter.received} of ${eventsCounter.requested})  ReplayId ${this.objLastReplayId.valueNumber}. Total received: ${++this
-								.totalEvents} | Data[50]: ${item.event.payload.toString().substr(0, 50)}...`
+								.totalEvents} | Data[${charCount}]: ${item.event.payload.toString().substring(0, charCount)}...`
 						);
 					});
 				} catch (ex) {
@@ -172,9 +173,9 @@ class SalesforceClientSimple {
 		setTimeout(() => {
 			let perf = process.memoryUsage();
 			this.performance.push(perf);
-			console.log(`\x1B[2m`); // Dim output
+			process.stdout.write(`\x1B[2m`); // Dim output
 			console.warn(`${new Date().toJSON()} >>> Performance ${JSON.stringify(perf)}`);
-			console.log(`\x1b[0m`); // Reset colors
+			process.stdout.write(`\x1b[0m`); // Reset colors
 			// debugger;
 		}, 0);
 	}
