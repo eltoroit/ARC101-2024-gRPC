@@ -4,33 +4,12 @@
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
-		// {
-		// 	"type": "node",
-		// 	"request": "launch",
-		// 	"name": "SF Simple",
-		// 	"skipFiles": ["<node_internals>/**"],
-		// 	"program": "${workspaceFolder}/salesforceClientSimple.js"
-		// },
-		// {
-		// 	"type": "node",
-		// 	"request": "launch",
-		// 	"name": "SF Library",
-		// 	"skipFiles": ["<node_internals>/**"],
-		// 	"program": "${workspaceFolder}/salesforceClientLibrary.js"
-		// },
-		// {
-		// 	"type": "node",
-		// 	"request": "launch",
-		// 	"name": "PingPong Server",
-		// 	"skipFiles": ["<node_internals>/**"],
-		// 	"program": "${workspaceFolder}/pingPongServer.js"
-		// },
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "Client",
-			"skipFiles": ["<node_internals>/**"],
-			"program": "${workspaceFolder}/demo05_SalesforceCDC/salesforceClientLibraryCDC.js"
+			"name": "demo04_clientSFSimple",
+			"skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**", "*VM*"],
+			"program": "${workspaceFolder}/demo04_SalesforceSimple/salesforceClientSimple.js"
 		}
 	]
 }
