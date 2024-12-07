@@ -10,7 +10,9 @@ class ServerStream {
 		let counter = 0;
 		let { max } = call.request;
 		const timer = setInterval(() => {
-			call.write({ dttm: new Date().toJSON(), max, counter: ++counter });
+			const output = { dttm: new Date().toJSON(), max, counter: ++counter };
+			console.log(`Replying:`, output);
+			call.write(output);
 			if (counter >= max) {
 				clearInterval(timer);
 				call.end();

@@ -17,8 +17,9 @@ class DemoRPC {
 
 	async add(i, j) {
 		return new Promise((resolve, reject) => {
-			this.client.add({ i, j }, (err, response) => {
-				resolve(response.k);
+			this.client.add({ i, j }, (err, data) => {
+				console.log(`${data.i} + ${data.j} = ${data.k}`);
+				resolve(data.k);
 			});
 		});
 	}

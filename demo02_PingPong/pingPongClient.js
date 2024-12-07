@@ -8,26 +8,30 @@ class Client {
 	}
 
 	mainLoop() {
-		let times = 0;
+		let delay = 1;
+		let times = 1;
 		const loop = () => {
 			const msg = {
 				times,
 				dttm: new Date().toJSON(),
-				message: `> PING #${times}`,
+				message: `${new Date().toJSON()} | <<< PING #${times}`,
 			};
+			console.error(msg.message);
 			console.log(new Date().toJSON(), msg);
 			this.client.ping(msg, (err, response) => {
 				if (err) {
 					console.log(err);
 					return;
 				}
-				console.log(new Date().toJSON(), response);
-				console.log("---");
+				setTimeout(() => {
+					console.log(new Date().toJSON(), response);
+					console.log("---");
 
-				times++;
-				if (times <= 5) {
-					loop();
-				}
+					times++;
+					if (times <= 5) {
+						loop();
+					}
+				}, delay * 1e3);
 			});
 		};
 		loop();
@@ -38,7 +42,7 @@ class Client {
 			const msg = {
 				dttm: new Date().toJSON(),
 				message: "Do you want to play ping-pong?",
-				delay: 2,
+				delay: 1,
 			};
 			console.log(msg);
 			this.client.askToPlay(msg, (err, response) => {

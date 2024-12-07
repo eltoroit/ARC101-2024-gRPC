@@ -5,7 +5,9 @@ class Server {
 	add(call, callback) {
 		let request = call.request;
 		let { i, j } = request;
-		callback(null, { k: i + j });
+		let k = i + j;
+		console.log(`${i} + ${j} = ${k}`);
+		callback(null, { i, j, k });
 	}
 
 	startServer() {

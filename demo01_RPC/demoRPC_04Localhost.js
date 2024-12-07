@@ -10,8 +10,8 @@ class DemoRPC {
 	async add(i, j) {
 		const response = await fetch(`http://localhost:3000/add?i=${i}&j=${j}`);
 		const data = await response.json();
-
-		return data.sum;
+		console.log(`${data.i} + ${data.j} = ${data.k}`);
+		return data.k;
 	}
 }
 

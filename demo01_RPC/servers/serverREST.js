@@ -11,7 +11,8 @@ app.get("/add", (req, res) => {
 		return res.status(503).json({ error: "Invalid input. Please provide two integers." });
 	}
 	const k = i + j;
-	res.json({ sum: k });
+	console.log(`${i} + ${j} = ${k}`);
+	res.json({ i, j, k });
 });
 
 app.listen(PORT, () => {

@@ -6,11 +6,15 @@ service Math {
   rpc add (InputData) returns (OutputData) {}
 }
 
+// Numbers are NOT positions, but keys!
 message InputData {
   int32 i = 1;
   int32 j = 2;
 }
 
+// Numbers are NOT positions, but keys!
 message OutputData {
-  string k = 1;
+  int32 i = 1;
+  int32 j = 2;
+  string k = 3;
 }

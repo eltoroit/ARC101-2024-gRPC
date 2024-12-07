@@ -10,7 +10,7 @@ class Server {
 			const msg = {
 				dttm: new Date().toJSON(),
 				message: "Yes, let's play!",
-				isPlaying: Math.random() > 0.5,
+				isPlaying: true, // Math.random() > 0.25,
 			};
 			console.log(msg);
 			callback(null, msg);
@@ -18,17 +18,18 @@ class Server {
 	}
 
 	ping(call, callback) {
-		let delay = 2;
+		let delay = 1;
 		let request = call.request;
 		let times = request.times ? request.times : "?";
 		let message = request.message ? request.message : "ERROR NO MESSAGE RECEIVED";
-		console.log(new Date().toJSON(), request);
 		setTimeout(() => {
+			console.log(new Date().toJSON(), request);
 			const msg = {
 				times,
 				dttm: new Date().toJSON(),
-				message: `${new Date().toJSON()} | <<< PONG #${times}`,
+				message: `${new Date().toJSON()} | >>> PONG #${times}`,
 			};
+			console.error(msg.message);
 			console.log(msg);
 			callback(null, msg);
 		}, delay * 1e3);
