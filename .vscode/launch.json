@@ -7,9 +7,9 @@
 		{
 			"type": "node",
 			"request": "launch",
-			"name": "demo05_clientSFLibraryCDC",
+			"name": "demo06_clientSFLibraryPE_Pub",
 			// "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**", "*VM*"],
-			"program": "${workspaceFolder}/demo05_SalesforceLibraryCDC/salesforceClientLibraryCDC.js"
+			"program": "${workspaceFolder}/demo06_SalesforcePE/salesforceClientLibraryPE_Pub.js"
 		}
 	]
 }

@@ -97,17 +97,18 @@ class SalesforceClientLibraryCDC {
 
 	#getCredentialsViaPostman() {
 		const testPostman = JSON.parse(process.env.TEST_POSTMAN);
+		const userUrl = testPostman.id;
 		const credentials = {
 			authType: "user-supplied",
 			accessToken: testPostman.access_token,
 			instanceUrl: testPostman.instance_url,
 			organizationId: testPostman.access_token.split("!")[0],
+			userId: userUrl.substring(userUrl.lastIndexOf("/") + 1),
 		};
-		process.env.SALESFORCE_LOGIN_URL = credentials.instanceUrl;
 		return credentials;
 	}
 
-	showAllMessages = true;
+	showAllMessages = false;
 	#logger = {
 		debug: (...params) => {
 			if (this.showAllMessages) {
